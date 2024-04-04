@@ -1,3 +1,13 @@
+#!/usr/bin/python3
+#
+# clean_enshrouded.py V0.1
+#
+# A python3 program written by: Brad Morgan
+#
+# Clean the ...\"Saved Games"\Enshrouded directory by 
+# assuring the base world files are the most recent and 
+# removing all the other world files.
+#
 import os
 import time
 import json
@@ -14,15 +24,13 @@ ext1 = ["","_info"]
 ext2 = ["-index", "_info-index"]
 ext3 = ["", "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "-9"]
 
+#
+# Configure command line arguments (in addition to the default -h, --help)
+# The -c, --clean argument is required to take any action on the files.
+#
 parser = argparse.ArgumentParser(description='Process Enshrouded world files.')
 parser.add_argument('-c', '--clean', action='store_true', help='remove all but the base files')
-parser.add_argument('-w', '--wait', action='store_true', help='sleep for 10 seconds before exiting')
-parser.add_argument('-q', '--quit', action='store_true', help='exit after parsing arguments')
-
 args = parser.parse_args()
-print(args)
-if args.quit:
-	exit()
 #
 # Loop through the slot filenames
 #
@@ -124,5 +132,4 @@ for slot, val in enumerate(slots, start=1):
 #
 # When run from an Explorer window give some time to view the results.
 #
-if args.wait:
-	time.sleep(10)
+time.sleep(10)
