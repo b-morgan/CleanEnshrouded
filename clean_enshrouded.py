@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #
-# clean_enshrouded.py V0.1
+# clean_enshrouded.py V0.2
 #
 # A python3 program written by: Brad Morgan
 #
@@ -13,6 +13,7 @@ import time
 import json
 import datetime
 import argparse
+import subprocess
 #
 # slots contains a list of the Enshrouded filenames in slot order (-1)
 # ext1 contains a list of filenames built from slots and ext1
@@ -29,8 +30,32 @@ ext3 = ["", "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "-9"]
 # The -c, --clean argument is required to take any action on the files.
 #
 parser = argparse.ArgumentParser(description='Process Enshrouded world files.')
-parser.add_argument('-c', '--clean', action='store_true', help='remove all but the base files')
+parser.add_argument('-b', '--backup', action='store_true', help='backup all the world files first')
+parser.add_argument('-c', '--clean', action='store_true', help='remove all but the base world files')
+parser.add_argument('-w', '--wait', help='wait N seconds before exiting')
+parser.add_argument('-d', '--directory', help='directory to process')
 args = parser.parse_args()
+
+if args.directory:
+	os.chdir(args.directory)
+print("\nProcessing files in:",os.getcwd(),"\n")
+
+#
+# Backup all the Enshrouded world files (filenames that start with 3)
+# requires the program 7-zip, https://www.7-zip.org/
+# or use 'powershell Compress-Archive -Path ".\3*" -DestinationPath ".\backup.zip" -Force'
+#
+if args.backup:
+	try:
+		f = open("backup.zip")
+	except:
+		pass
+	else:
+		f.close()
+		os.remove("backup.zip")
+	subprocess.run("7z a -x!*.* backup.zip 3*", stdout = subprocess.DEVNULL)
+	print("Created backup.zip\n")
+
 #
 # Loop through the slot filenames
 #
@@ -91,6 +116,9 @@ for slot, val in enumerate(slots, start=1):
 						match = "and they don't match"
 					print("    ","index time is",dt,val+ext1[i]+ext3[jdat["latest"]],"time is",fdt,match)
 				f.close()
+#
+# The following code is only executed if there is a "-c" or "--clean" on the command line
+#
 				if args.clean:
 #
 # Rename the latest -n file to the base file
@@ -105,6 +133,7 @@ for slot, val in enumerate(slots, start=1):
 #
 					print("Deleting",val+ext)
 					os.remove(val+ext)
+# 		end of enumerate(ext2)
 #
 # Remove any other -n files
 #
@@ -128,8 +157,13 @@ for slot, val in enumerate(slots, start=1):
 					f.close()
 					print("Deleting",val+"_info"+dash)
 					os.remove(val+"_info"+dash)
-		print("Done cleaning:", val)
+		print("Done cleaning:", val,"\n")
+# end of enumerate(slots)
 #
-# When run from an Explorer window give some time to view the results.
+# Give some time to view the results (when run from an Explorer window)
+# (default is 10 seconds)
 #
-time.sleep(10)
+if args.wait:
+	time.sleep(args.wait)
+else:
+	time.sleep(10)
