@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 #
-# clean_enshrouded.py V0.2
+# clean_enshrouded.py V1.0
 #
 # A python3 program written by: Brad Morgan
 #
@@ -29,8 +29,9 @@ ext3 = ["", "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "-9"]
 # Configure command line arguments (in addition to the default -h, --help)
 # The -c, --clean argument is required to take any action on the files.
 #
-parser = argparse.ArgumentParser(description='Process Enshrouded world files.')
-parser.add_argument('-b', '--backup', action='store_true', help='backup all the world files first')
+parser = argparse.ArgumentParser(description='V1.0 - Clean Enshrouded world file directory.')
+parser.add_argument('-b', '--backup', action='store_true', help='backup all the world files first (using 7z)')
+parser.add_argument('-p', '--powershell', action='store_true', help='backup all the world files first (using powershell)')
 parser.add_argument('-c', '--clean', action='store_true', help='remove all but the base world files')
 parser.add_argument('-w', '--wait', help='wait N seconds before exiting')
 parser.add_argument('-d', '--directory', help='directory to process')
@@ -42,10 +43,10 @@ print("\nProcessing files in:",os.getcwd(),"\n")
 
 #
 # Backup all the Enshrouded world files (filenames that start with 3)
-# requires the program 7-zip, https://www.7-zip.org/
-# or use 'powershell Compress-Archive -Path ".\3*" -DestinationPath ".\backup.zip" -Force'
+# uses the program 7-zip, https://www.7-zip.org/
+# or 'powershell Compress-Archive -Path ".\3*" -DestinationPath ".\backup.zip" -Force'
 #
-if args.backup:
+if args.backup or args.powershell:
 	try:
 		f = open("backup.zip")
 	except:
@@ -53,7 +54,10 @@ if args.backup:
 	else:
 		f.close()
 		os.remove("backup.zip")
-	subprocess.run("7z a -x!*.* backup.zip 3*", stdout = subprocess.DEVNULL)
+		if args.powershell:
+			subprocess.run('powershell Compress-Archive -Path ".\3*" -DestinationPath ".\backup.zip" -Force', stdout = subprocess.DEVNULL)
+		else:
+			subprocess.run("7z a -x!*.* backup.zip 3*", stdout = subprocess.DEVNULL)
 	print("Created backup.zip\n")
 
 #
