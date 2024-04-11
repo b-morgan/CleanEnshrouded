@@ -44,9 +44,8 @@ The `-d` switch is optional and if present, the program will switch to that dire
 
 ## Cautions
 
-This program has not been tested on the directory used by Enshrouded Dedicated Servers.
+This program has not been tested on the directory used by Enshrouded Dedicated Servers but it should work when the server is stopped.
 
 This program has not been tested on the directory used when Steam Cloud saves are enabled and
 there is a chance that data corruption and/or a loss of worlds could happen. 
-
 It has been tested on a copy of the Steam Cloud save directory.
