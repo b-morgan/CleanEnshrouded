@@ -1,10 +1,11 @@
 # CleanEnshrouded
-Clean the Saved Games Enshrouded directory by assuring the base world files are the most recent and removing all the other world files.
+Clean the Saved Games Enshrouded directory by assuring the base world files are the most recent and 
+removing all the other world files.
 
-A Python3 installation is needed if you wish to use the .py file. Alternatively, an executable file is provided in the dist directory.
+This is a Python3 program and a Python3 installation is needed if you wish to use the .py file. 
+An executable file is provided so a Python3 installation is not needed.
 
-It is recommended to run the program from a command window. The program processes files in the current directory. It is recommended to make a backup first.
-
+# Command line options
 ```
 usage: clean_enshrouded.exe [-h] [-b] [-p] [-c] [-w WAIT] [-d DIRECTORY]
 
@@ -19,3 +20,21 @@ options:
   -d DIRECTORY, --directory DIRECTORY
                         directory to process
 ```
+
+# Recommendations
+
+By default (i.e. no switches on the command line), the program just analyzes the current directory and exits. 
+A `-c` on the command line is needed to actually process the directory.
+
+While a copy of the program can be placed in the same location as the world files, it can be installed in one location and 
+one (or more) shortcut(s) can be created. The `Target:` can be edited to add command line switches (from above) and 
+the `Start in:` can be edited to the location of the world save files.
+
+It is recommended to make a backup first. The program will first create a `backup.zip` file in the current directory 
+if `-b` or `-p` command line switches are present. The `-b` switch uses the program 7-zip, https://www.7-zip.org/ and 
+the `-p` switch uses PowerShell.
+
+The program output is sent to a console window. If started from an Explorer window (or a shortcut), 
+this console window will close when the program exits. 
+A "sleep" for 10 seconds before exiting allows some time for the output to be read and 
+this time can be changed with the `-w` switch.
